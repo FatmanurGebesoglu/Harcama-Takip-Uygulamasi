@@ -1,16 +1,22 @@
 import './Home.module.css'
 import {Container, Grid,Paper} from '@mui/material'
 import Form from './Form'
+import Liste from './Liste'
 import { useAuthContext } from '../../hooks/useAuthContext'
-
+import { useCollection } from '../../hooks/useCollection'
 export default function Home() {
 
+  
   const {user} = useAuthContext();
+  const{belgeler,hata}=useCollection('harcamalar');
   return (
     <Container sx={{mt:8}}>
-        <Grid container spacing={2}>
+        <Grid container spacing={10}>
             <Grid item md={8} sm={12} xs={12} >
-                  <Paper>Liste</Paper>
+                  {hata && <p>{hata}</p>}
+                  {
+                    belgeler&& <Liste harcamalar={belgeler} />
+                  }
             </Grid>
             <Grid item md={4} sm={12} xs={12} >
                   <Form uid={user.uid}/>
