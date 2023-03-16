@@ -8,8 +8,8 @@ export default function Home() {
 
   
   const {user} = useAuthContext();
-  const{belgeler,hata}=useCollection('harcamalar', ["uid","==",user.uid],
-  ["olusturmaTarih", "desc" ]
+  const {belgeler,hata}=useCollection('harcamalar', ["uid","==",user.uid],
+  ["olusturulmaTarih", "desc" ]
   );
   return (
     <Container sx={{mt:8}}>
@@ -17,7 +17,7 @@ export default function Home() {
             <Grid item md={8} sm={12} xs={12} >
                   {hata && <p>{hata}</p>}
                   {
-                    belgeler&& <Liste harcamalar={belgeler} />
+                    belgeler && <Liste harcamalar={belgeler} />
                   }
             </Grid>
             <Grid item md={4} sm={12} xs={12} >

@@ -15,8 +15,9 @@ export default function Form({uid}) {
 
     useEffect(()=>{
         if(response.basari){
-            setBaslik('')
-            setMiktar('')
+            console.log("merhaba fatmanur");
+            setBaslik(' ');
+            setMiktar(' ');
         }
     },[response.basari])
 

@@ -10,10 +10,11 @@ export const useCollection=(col,_query,_orderBy)=>{
     const [hata,setHata]=useState(null)
 
     const q= useRef(_query).current;
-    const oBy= useRef(_orderBy).current;
-    console.log(...q);
+    const oBy= useRef(_orderBy).current; 
+     
 
     useEffect(()=>{
+
         let ref=collection(db,col);
 
         if(q){
@@ -22,19 +23,19 @@ export const useCollection=(col,_query,_orderBy)=>{
         if(oBy){
             ref=query(ref,orderBy(...oBy));
         }
-        const unsubcribe=onSnapshot(ref,snapshot=>{
+        const unsubscribe=onSnapshot(ref,snapshot=>{
             let sonuclar=[];
             snapshot.docs.forEach(doc=>{
                 sonuclar.push({...doc.data(),id:doc.id})
             })
 
             setBelgeler(sonuclar);
-            setHata(null)
+            setHata(null);
         },error=>{
             console.log(error);
             setHata('veriler getirilemedi');
         })
-        return ()=> unsubcribe();
+        return ()=> unsubscribe();
     },[col])
 
     return {belgeler,hata}

@@ -1,6 +1,6 @@
 import { useEffect, useState, useReducer } from "react";
 import { db } from "../firebase/config";
-import { collection, addDoc, serverTimestamp} from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, deleteDoc } from "firebase/firestore";
 
 
 const baslangicVeri = {
@@ -18,6 +18,8 @@ const firestoreReducer = (state, action) => {
             return { hata: null, belge: action.payload, basari: true, bekliyor: false }
         case 'HATA':
             return { hata: action.payload, belge: null, basari: false, bekliyor: false }
+        case 'BELGE_SILINDI':
+            return { hata: null, belge: null, basari: true, bekliyor: false }
         default:
             return state;
     }
@@ -36,26 +38,41 @@ export const useFirestore = (col) => {
 
         try {
 
-            const olusturulmaTarih=serverTimestamp();
-            const eklenenBelge = await addDoc(ref, {...belge,olusturulmaTarih})
+            const olusturulmaTarih = serverTimestamp();
+            const eklenenBelge = await addDoc(ref, { ...belge, olusturulmaTarih })
             if (!iptal) {
                 dispatch({ type: 'BELGE_EKLENDI', payload: eklenenBelge })
             }
         } catch (error) {
-            if(!iptal){
-                dispatch({type:'HATA',payload:error.message})
+            if (!iptal) {
+                dispatch({ type: 'HATA', payload: error.message })
             }
         }
 
     }
 
     const belgeSil = async (id) => {
+        dispatch({ type: 'BEKLIYOR' })
+        try {
+
+            let ref= doc(db,col,id);
+            await deleteDoc(ref);
+            if(!iptal){
+                dispatch({ type: 'BELGE_SILINDI' })
+            }
+            
+        } catch (error) {
+            if (!iptal) {
+                dispatch({ type: 'HATA', payload: error.message })
+            }
+            
+        }
 
     }
 
     useEffect(() => {
         return () => setIptal(true)
-    },[])
+    }, [])
 
     return { belgeEkle, belgeSil, response }
 
