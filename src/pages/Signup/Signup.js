@@ -4,8 +4,11 @@ import { useSignup } from '../../hooks/useSignup'
 import { Container, Typography, Button, FormControl, OutlinedInput, InputLabel, InputAdornment, IconButton } from '@mui/material'
 import { useState } from 'react'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
 
 export default function Signup() {
+
+  const navigate = useNavigate();
 
   const { signup, hata, bekliyor } = useSignup();
 
@@ -28,6 +31,7 @@ export default function Signup() {
     e.preventDefault();
     //console.log(values);
     signup(values.email, values.password, values.userName);
+    navigate('/');
   }
 
   const handleClickShowPassword = () => {
