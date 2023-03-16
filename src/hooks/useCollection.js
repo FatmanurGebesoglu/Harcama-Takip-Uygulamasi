@@ -1,17 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { db } from "../firebase/config";
-import { collection,onSnapshot } from "firebase/firestore";
+import { collection,onSnapshot, query, where } from "firebase/firestore";
 
 
-export const useCollection=(col)=>{
+export const useCollection=(col,_query)=>{
 
 
     const [belgeler,setBelgeler]=useState(null)
     const [hata,setHata]=useState(null)
 
+    const q= useRef(_query).current;
+    console.log(...q);
 
     useEffect(()=>{
         let ref=collection(db,col);
+
+        if(q){
+            ref=query(ref,where(...q))
+        }
+
         const unsubcribe=onSnapshot(ref,snapshot=>{
             let sonuclar=[];
             snapshot.docs.forEach(doc=>{
