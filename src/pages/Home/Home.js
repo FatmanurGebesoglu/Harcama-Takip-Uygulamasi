@@ -8,7 +8,9 @@ export default function Home() {
 
   
   const {user} = useAuthContext();
-  const{belgeler,hata}=useCollection('harcamalar', ["uid","==",user.uid]);
+  const{belgeler,hata}=useCollection('harcamalar', ["uid","==",user.uid],
+  ["olusturmaTarih", "desc" ]
+  );
   return (
     <Container sx={{mt:8}}>
         <Grid container spacing={10}>
